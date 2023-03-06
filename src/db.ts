@@ -1,4 +1,7 @@
 import { FieldDefinition, Product } from "./helper";
+import fs from "node:fs";
+
+
 
 type Database = {
   categories: string[];
@@ -8,7 +11,7 @@ type Database = {
   products: Product[];
 };
 
-const db: Database = {
+let db: Database = {
   categories: ["TV", "Smartphone"],
   productFields: {
     TV: [
@@ -27,6 +30,13 @@ const db: Database = {
     { type: "Smartphone", name: "Fold Z", manufacturer: "Samsung", RAM: 16 },
   ],
 };
+try{
+  const jsonString = fs.readFileSync('./dist/db.json',{encoding: "utf8"});
+  db = JSON.parse(jsonString);
+} catch(e){
+
+}
+
 
 function getCategories() {
   return db.categories;
@@ -46,5 +56,10 @@ function getFieldsByType(productType: string) {
 
 function addProduct(data: Product) {
   db.products.push(data);
+  try{
+    fs.writeFileSync('./dist/db.json', JSON.stringify(db), {encoding:"utf8"})
+  } catch (error){
+    console.log('DB was not persisted due to error ' + error);
+  }
 }
 export default { getData, getDataByType, getCategories, getFieldsByType, addProduct };
