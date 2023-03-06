@@ -1,6 +1,5 @@
 export interface Product {
   type: string;
-  name: string;
   [key: string]: string | number;
 };
 export type fieldType = "string" | "number";

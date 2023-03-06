@@ -40,4 +40,11 @@ function getDataByType(type: string) {
   return db.products.filter((el) => el.type === type);
 }
 
-export default { getData, getDataByType, getCategories };
+function getFieldsByType(productType: string) {
+  return db.productFields[productType];
+}
+
+function addProduct(data: Product) {
+  db.products.push(data);
+}
+export default { getData, getDataByType, getCategories, getFieldsByType, addProduct };
