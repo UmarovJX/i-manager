@@ -1,26 +1,29 @@
-import db from "./db";
+import { IDB } from "./db";
 import { Product } from "./helper";
 import reader from "./reader";
 
 export default class Controller {
-  static async showList() {
-    console.log(JSON.stringify(db.getData(), null, 4));
+  private db: IDB;
+  constructor(dbi: IDB) {
+    this.db = dbi;
   }
-
-  static async addProduct() {
+  async showList(prompt: string) {
+    console.log(JSON.stringify(this.db.getData(), null, 4));
+  }
+  async addProduct() {
     let productType = await reader.question(
       "Введите тип продукта. Доступные типы: " +
-        db.getCategories().join(",") +
+        this.db.getCategories().join(",") +
         ": "
     );
-    if (!db.getCategories().includes(productType))
-      return console.log("Такой типа продукта не существует");
-    db.addProduct(await Controller.getFields(productType));
+    if (!this.db.getCategories().includes(productType))
+      return console.log("Такого типа продукта не существует");
+    this.db.addProduct(await this.getFields(productType));
     console.log("Продукт добавлен");
   }
 
-  private static async getFields(productType: string): Promise<Product> {
-    const fieldDefinition = db.getFieldsByType(productType);
+  private async getFields(productType: string): Promise<Product> {
+    const fieldDefinition = this.db.getFieldsByType(productType);
     const res: Product = { type: productType };
     let i = 0;
     while (true) {

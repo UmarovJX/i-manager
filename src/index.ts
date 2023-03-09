@@ -1,6 +1,9 @@
 import reader from "./reader";
 import Controller from "./dbController";
+import { dbInterface } from "./db";
 console.log("Hello");
+
+const controller = new Controller(dbInterface);
 
 async function main() {
   const answer = (
@@ -13,10 +16,10 @@ async function main() {
 
   switch (true) {
     case answer.startsWith("show list"):
-      await Controller.showList();
+      await controller.showList(answer);
       break;
     case answer.startsWith("add product"):
-      await Controller.addProduct();
+      await controller.addProduct();
       break;
     case answer === "exit":
       console.log("\nGoodbye!");
