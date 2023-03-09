@@ -11,6 +11,13 @@ type Database = {
   products: Product[];
 };
 
+export interface IDB {
+  getCategories ():string[];
+  getData():Product[];
+  addProduct(product:Product): void;
+  getFieldsByType(type:string):FieldDefinition[];
+}
+
 let db: Database = {
   categories: ["TV", "Smartphone"],
   productFields: {
@@ -62,4 +69,5 @@ function addProduct(data: Product) {
     console.log('DB was not persisted due to error ' + error);
   }
 }
-export default { getData, getDataByType, getCategories, getFieldsByType, addProduct };
+export const dbInterface = { getData, getDataByType, getCategories, getFieldsByType, addProduct } as IDB;
+
